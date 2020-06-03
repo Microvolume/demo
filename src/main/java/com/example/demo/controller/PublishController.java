@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.cache.TagCache;
 import com.example.demo.dto.QuestionDTO;
 import com.example.demo.model.Question;
 import com.example.demo.model.User;
 import com.example.demo.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,10 +34,12 @@ public class PublishController {
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", question.getId());
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
     @PostMapping("/publish")
@@ -49,18 +53,23 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
-        if (title == null || title == "") {
+        model.addAttribute("tags", TagCache.get());
+
+        if (StringUtils.isBlank(title)) {
             model.addAttribute("error", "标题不能为空");
             return "publish";
         }
-        if (description == null || description == "") {
+
+        if (StringUtils.isBlank(description)) {
             model.addAttribute("error", "问题补充不能为空");
             return "publish";
         }
-        if (tag == null || tag == "") {
+
+        if (StringUtils.isBlank(tag)) {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
+
         //从拦截器类中获取user
         User user = (User) request.getSession().getAttribute("user");
         //如果要是有异常的话，就跳转回去（博客发布问题页）
