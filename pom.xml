@@ -104,9 +104,11 @@
             <version>3.7</version>
         </dependency>
     </dependencies>
+
+
     <packaging>jar</packaging>
     <build>
-        <finalName>demo-login</finalName>
+        <finalName>demo</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -158,9 +160,5 @@
 
         </plugins>
     </build>
-
-
-
-
 
 </project>
