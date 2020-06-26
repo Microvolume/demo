@@ -8,6 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface QuestionExtMapper {
+    //增加浏览数的方法
     int incView(Question record);
 
     int incCommentCount(Question record);

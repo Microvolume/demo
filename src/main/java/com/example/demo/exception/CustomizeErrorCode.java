@@ -24,6 +24,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode {
     }
     private Integer code;
     private String message;
+
     CustomizeErrorCode(Integer code, String message) {
         this.message = message;
         this.code = code;

@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import lombok.Data;
-
 /**
  * Created by codedrinker on 2019/5/30.
  */

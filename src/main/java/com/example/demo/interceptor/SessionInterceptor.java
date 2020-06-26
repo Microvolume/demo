@@ -20,6 +20,7 @@ import java.util.List;
 
 @Service
 public class SessionInterceptor implements HandlerInterceptor {
+
     @Autowired
     private UserMapper userMapper;
 
@@ -35,6 +36,7 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     //这种数据库存session方式的话，如果用户量比较大的情况下的话，性能可能会下降，可以采用redis分布式session等技术解决
     //preHandle，该拦截器程序的作用就是，当访问任意地址时，地址都能被该拦截器拦截，在拦截器进行统一处理
+    //throws跟throw的区别 ？因为有的地方用的throws，有的地方用的throw
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //设置 context 级别的属性
         request.getServletContext().setAttribute("redirectUri", redirectUri);
@@ -54,8 +56,10 @@ public class SessionInterceptor implements HandlerInterceptor {
                             .andTokenEqualTo(token);
                     List<User> users = userMapper.selectByExample(userExample);
                     if (users.size() != 0) {
+                        //通过前端的Cookie，将用户的Session登陆态信息回显到前端
                         HttpSession session = request.getSession();
                         session.setAttribute("user", users.get(0));
+                        //下面两行是啥意思？
                         Long unreadCount = notificationService.unreadCount(users.get(0).getId());
                         session.setAttribute("unreadCount", unreadCount);
                     }
@@ -65,7 +69,6 @@ public class SessionInterceptor implements HandlerInterceptor {
         //如果返回的是true，则程序继续执行
         return true;
     }
-
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 

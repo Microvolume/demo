@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by codedrinker on 2019/5/28.
  */
+// 看不懂，看不懂这个。。。
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class CustomizeErrorController implements ErrorController {

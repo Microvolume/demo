@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">   <!-- 只有在html中引入了该标签，才能使用thymeleaf的模板解析功能 -->
 
 <body>
 
@@ -10,17 +10,17 @@
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                         data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">TECH TALK</span>
+                    <span class="sr-only">TECH TALK</span>   <!-- 标题名称是 TECH TALK -->
                 </button>
-                <a class="navbar-brand" href="/">TECH TALK</a>
+                <a class="navbar-brand" href="/">TECH TALK</a>   <!-- 标题是超链接 -->
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <form class="navbar-form navbar-left" action="/" method="get">
+                <form class="navbar-form navbar-left" action="/" method="get">    <!-- Bootstrap里的导航栏样式，action 和 method 属性是后加的-->
                     <div class="form-group">
-                        <input type="text" class="form-control" name="search" placeholder="搜索问题">
+                        <input type="text" class="form-control" name="search" placeholder="搜索问题">     <!-- placeholder的意思是当鼠标放进去后会显示的提示 -->
                     </div>
-                    <button type="submit" class="btn btn-default">搜索</button>
+                    <button type="submit" class="btn btn-default">搜索</button>   <!-- Bootstrap里的导航栏样式 -->
                 </form>
                 <ul class="nav navbar-nav">
                     <script>
@@ -37,7 +37,7 @@
                            target="_blank"></a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right">   <!-- 该ul标签里包裹的90%代码都是直接来自于Bootstrap里的导航栏样式 -->
                     <li th:if="${session.user != null}">
                         <a href="/publish">提问</a>
                     </li>

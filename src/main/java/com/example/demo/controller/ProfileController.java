@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ProfileController {
     @Autowired
     private QuestionService questionService;
+
     @Autowired
     private NotificationService notificationService;
 
@@ -36,7 +37,6 @@ public class ProfileController {
             model.addAttribute("sectionName", "我的提问");
             PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
             model.addAttribute("pagination", paginationDTO);
-
         }else if ("replies".equals(action)) {
             //访问最新回复页面
             PaginationDTO paginationDTO = notificationService.list(user.getId(), page, size);

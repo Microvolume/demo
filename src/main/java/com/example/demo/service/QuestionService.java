@@ -39,7 +39,7 @@ public class QuestionService {
     private UserMapper userMapper;
 
     public PaginationDTO list(String search, String tag, String sort, Integer page, Integer size) {
-
+        //如果搜索输入的内容非空的话，才执行下面的这个逻辑
         if (StringUtils.isNotBlank(search)) {
             String[] tags = StringUtils.split(search, " ");
             search = Arrays
@@ -51,7 +51,6 @@ public class QuestionService {
         }
 
         PaginationDTO paginationDTO = new PaginationDTO();
-
         Integer totalPage;
 
         QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
@@ -60,11 +59,10 @@ public class QuestionService {
             tag = tag.replace("+", "").replace("*", "").replace("?", "");
             questionQueryDTO.setTag(tag);
         }
-
+        //这段属于对问题的热度、最新程序进行排序
         for (SortEnum sortEnum : SortEnum.values()) {
             if (sortEnum.name().toLowerCase().equals(sort)) {
                 questionQueryDTO.setSort(sort);
-
                 if (sortEnum == SortEnum.HOT7) {
                     questionQueryDTO.setTime(System.currentTimeMillis() - 1000L * 60 * 60 * 24 * 7);
                 }
@@ -76,7 +74,6 @@ public class QuestionService {
         }
 
         Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
-
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {
@@ -129,6 +126,7 @@ public class QuestionService {
         if (page < 1) {
             page = 1;
         }
+
         if (page > totalPage) {
             page = totalPage;
         }
@@ -157,6 +155,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
+    // 根据id，去数据库中查这个id对应的question是否存在，若存在，就从数据库中拿出来，最终跳转到question.html页面
     public QuestionDTO getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
@@ -164,23 +163,26 @@ public class QuestionService {
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
+        // 如果根据id，去数据库中查这个id对应的question存在，就将该问题的作者作为参数，调用userMapper的接口去查询，从而查出该问题的作者
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
+        // OK，搞定！
     }
 
+    // 在编辑某个问题，并且发布的时候，需要有是否需要更新该问题内容，并存入数据库中的功能
     public void createOrUpdate(Question question) {
         if (question.getId() == null) {
-            // 创建
+            // 如果等于Null，就说明是第一次创建，就调用questionMapper.insert()
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
             question.setViewCount(0);
             question.setLikeCount(0);
             question.setCommentCount(0);
             questionMapper.insert(question);
-        } else {
-            // 更新
-
+        }
+        else {
+            // 否则则更新！OK，下面这段逻辑也看懂了！！！！
             Question dbQuestion = questionMapper.selectByPrimaryKey(question.getId());
             if (dbQuestion == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -189,7 +191,6 @@ public class QuestionService {
             if (dbQuestion.getCreator().longValue() != question.getCreator().longValue()) {
                 throw new CustomizeException(CustomizeErrorCode.INVALID_OPERATION);
             }
-
             Question updateQuestion = new Question();
             updateQuestion.setGmtModified(System.currentTimeMillis());
             updateQuestion.setTitle(question.getTitle());
@@ -210,12 +211,14 @@ public class QuestionService {
      * 需要注意的一点是：数据库中的viewCount字段要初始化，否则代码一运行就会报空指针异常，这块儿曾经卡住2个小时
      */
     public void incView(Long id) {
+        //这里做了抗高并发的设计、涨姿势了！！
         Question question = new Question();
         question.setId(id);
         question.setViewCount(1);
         questionExtMapper.incView(question);
     }
 
+    //下面的这个方法就不看了！
     public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
         if (StringUtils.isBlank(queryDTO.getTag())) {
             return new ArrayList<>();

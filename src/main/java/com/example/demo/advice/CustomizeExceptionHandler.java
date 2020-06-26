@@ -17,8 +17,10 @@ import java.io.PrintWriter;
 @ControllerAdvice
 @Slf4j
 public class CustomizeExceptionHandler {
+    //Exception.class的意思即是所有的异常都经此处理
     @ExceptionHandler(Exception.class)
     ModelAndView handle(Throwable e, Model model, HttpServletRequest request, HttpServletResponse response) {
+        //如果返回的是 application/json，说明是Ajax接口返回的异常，那么返回json就可以了
         String contentType = request.getContentType();
         if ("application/json".equals(contentType)) {
             ResultDTO resultDTO;
@@ -30,6 +32,7 @@ public class CustomizeExceptionHandler {
                 resultDTO = ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
             }
             try {
+                //通过response往前端写Json，下面这几行需要百度百度学一下！
                 response.setContentType("application/json");
                 response.setStatus(200);
                 response.setCharacterEncoding("utf-8");
@@ -39,8 +42,10 @@ public class CustomizeExceptionHandler {
             } catch (IOException ioe) {
             }
             return null;
-        } else {
-            // 错误页面跳转
+        }
+
+        else {
+            // text/html的方式，就用下面的代码进行处理
             if (e instanceof CustomizeException) {
                 model.addAttribute("message", e.getMessage());
             } else {

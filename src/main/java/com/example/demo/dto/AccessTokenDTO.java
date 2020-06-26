@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import lombok.Data;
 //dto,在网络之间，类和类之间传输的对象，我们叫它dto
+
 @Data
 public class AccessTokenDTO {
     private String client_id;

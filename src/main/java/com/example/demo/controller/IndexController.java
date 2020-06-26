@@ -22,6 +22,7 @@ public class IndexController {
     @GetMapping("/")
     //首先，当在地址里输入localhost：8080时，会被"/"拦截，接下来做的是如下的：检验登陆状态，最后跳转到index页面
     //该路径方法首先会被拦截器程序拦截，执行完拦截器中程序之后，再继续向下执行，目的是用拦截器进行统一处理
+    //required=false，是怎么意思？？？
     public String index( Model model,
                          @RequestParam(name = "page", defaultValue = "1") Integer page,
                          @RequestParam(name = "size", defaultValue = "10") Integer size,

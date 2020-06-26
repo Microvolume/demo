@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,11 +61,12 @@ public class AuthorizeController {
             userService.createOrUpdate(user);
             //这里原来是手动写入cookie，我们现在要自动写入cookie
             /*request.getSession().setAttribute("user", githubUser);
-            return "redirect:/";*/
+            return "redirect:/"*/
             //这里按commend+P，便可以在方法中提示参数信息
             //登陆成功以后，如果通过验证，把token写到 cookie里面
             Cookie cookie = new Cookie("token", token);
             cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
+            //往前端传Cookie，是用response
             response.addCookie(cookie);
             return "redirect:/";
         } else {
@@ -85,7 +85,7 @@ public class AuthorizeController {
     @GetMapping("/logout")
     public String logout(HttpServletRequest request,
                          HttpServletResponse response) {
-        //退出登录时，将session和cookie里面的用户信息删除
+        //退出登录时，将session（获取session是通过HttpServletRequest对象获取的）和cookie（获取Cookie是通过HttpServletResponse对象获取的）里面的用户信息删除，这个方法是百度来的
         request.getSession().removeAttribute("user");
         Cookie cookie = new Cookie("token", null);
         cookie.setMaxAge(0);

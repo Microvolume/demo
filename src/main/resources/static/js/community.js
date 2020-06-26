@@ -21,6 +21,7 @@ function comment2target(targetId, type, content) {
         type: "POST",
         url: "/comment",
         contentType: 'application/json',
+        /*该工具的作用是将JavaScript对象转换成JSON字符串 */
         data: JSON.stringify({
             "parentId": targetId,
             "content": content,
@@ -28,15 +29,21 @@ function comment2target(targetId, type, content) {
         }),
         success: function (response) {
             if (response.code == 200) {
+                /* 输入的内容没问题的话，回复的时候，页面会重新reload，重新加载，OK */
                 window.location.reload();
             } else {
+                /*下面这几行的逻辑是不刷新页面登陆，当response的code是2003时候，也就意味着用户没有登陆的意思 */
                 if (response.code == 2003) {
+                    /*它就会给你弹出一个框出来 */
                     var isAccepted = confirm(response.message);
                     if (isAccepted) {
+                        /*然后当你点击了这个框之后，就会又给你打开一个登陆的窗口让你进行登录 */
                         window.open("https://github.com/login/oauth/authorize?client_id=2859958f9f059979ed3a&redirect_uri=" + document.location.origin + "/callback&scope=user&state=1");
                         window.localStorage.setItem("closable", true);
                     }
-                } else {
+                }
+                /*如果回复框里没有填写内容，就会弹出个警示框，提示你，输入的内容不能为空！ */
+                else {
                     alert(response.message);
                 }
             }
