@@ -1,5 +1,4 @@
 package com.example.demo.controller;
-
 import com.example.demo.cache.TagCache;
 import com.example.demo.dto.QuestionDTO;
 import com.example.demo.model.Question;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -21,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class PublishController {
+
     @Autowired
     private QuestionService questionService;
 
@@ -55,7 +54,7 @@ public class PublishController {
             @RequestParam(value = "id", required = false) Long id,
             HttpServletRequest request,
             Model model) {
-        //将接收的参数回显到前端
+        //将接收的参数回显到前端，这个地方是咋回事？
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
@@ -85,11 +84,11 @@ public class PublishController {
             return "publish";
         }
 
-        //这个地方没明白！！
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
+        //这个地方为什么不是用user的AccountID
         question.setCreator(user.getId());
         question.setId(id);
         questionService.createOrUpdate(question);

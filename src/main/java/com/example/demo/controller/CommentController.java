@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
     /**
      * Created by codedrinker on 2019/5/30.
      */
@@ -32,7 +31,6 @@ import java.util.List;
                            HttpServletRequest request) {
             // 从session中获取user
             User user = (User) request.getSession().getAttribute("user");
-
             //user可能不存在，要做异常处理！
             if (user == null) {
                 return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);

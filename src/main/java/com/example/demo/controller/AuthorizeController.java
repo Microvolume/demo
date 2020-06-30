@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.AccessTokenDTO;
 import com.example.demo.dto.GithubUser;
-import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
 import com.example.demo.provider.GithubProvider;
 import com.example.demo.service.UserService;
@@ -18,6 +17,8 @@ import java.util.UUID;
 
 @Controller
 public class AuthorizeController {
+    //@Value注解注入配置文件中的内容进行讲解，比如我们开发项目时常常会有几种环境，比如dev环境，test环境等等，
+    // 不同的环境某些参数就会不一样，配置文件不一样，这个时候就会用到@value注解了
     @Autowired
     private GithubProvider githubProvider;
     //为了避免当在线上环境时，当修改一些值时，不需要到代码中去修改，将这些变量封装到application.propereties中

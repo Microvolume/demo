@@ -56,9 +56,6 @@ public class CommentService {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
             Question question = questionMapper.selectByPrimaryKey(dbComment.getParentId());
-            if (question == null) {
-                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
-            }
             // 如果是评论评论的话，不但要把评论的评论插到数据库中，还要把评论的评论数 +1
             commentMapper.insert(comment);
             Comment parentComment = new Comment();
